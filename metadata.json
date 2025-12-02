@@ -1,0 +1,5 @@
+{
+  "name": "AgencyFlow - Web Design Management",
+  "description": "A comprehensive management system for web design agencies featuring role-based dashboards, Kanban pipelines, real-time chat simulation, and service order tracking.",
+  "requestFramePermissions": []
+}
