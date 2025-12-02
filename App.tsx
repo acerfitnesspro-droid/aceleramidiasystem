@@ -34,7 +34,7 @@ const LoginScreen: React.FC<{ onLogin: (user: User) => void }> = ({ onLogin }) =
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1">E-mail</label>
             <input
               type="email"
               value={email}
@@ -70,9 +70,15 @@ const AppLayout: React.FC<{ user: User; onLogout: () => void; children: React.Re
   const location = useLocation();
   
   const navItems = [
-    { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/' },
+    { icon: <LayoutDashboard size={20} />, label: 'Painel', path: '/' },
     { icon: <Layout size={20} />, label: 'Pipeline / OS', path: '/kanban' },
   ];
+
+  const roleTranslation: Record<Role, string> = {
+    [Role.ADMIN]: 'Administrador',
+    [Role.MANAGER]: 'Gestor Comercial',
+    [Role.DEV]: 'Desenvolvedor'
+  };
 
   return (
     <div className="flex h-screen bg-slate-50 text-slate-900 font-sans">
@@ -105,7 +111,7 @@ const AppLayout: React.FC<{ user: User; onLogout: () => void; children: React.Re
             <img src={user.avatar} alt="User" className="w-10 h-10 rounded-full bg-slate-700" />
             <div>
               <p className="font-medium text-sm">{user.name}</p>
-              <p className="text-xs text-slate-500 capitalize">{user.role.toLowerCase()}</p>
+              <p className="text-xs text-slate-500">{roleTranslation[user.role]}</p>
             </div>
           </div>
           <button onClick={onLogout} className="w-full flex items-center justify-center gap-2 text-slate-400 hover:text-white text-sm py-2">

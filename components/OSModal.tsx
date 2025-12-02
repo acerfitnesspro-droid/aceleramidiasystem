@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ServiceOrder, Message, User, Role } from '../types';
+import { ServiceOrder, Message, User, Role, OSStatus } from '../types';
 import { X, Send, Paperclip, CheckCircle, Clock, Calendar, User as UserIcon } from 'lucide-react';
 import { dataService } from '../services/dataService';
 
@@ -9,6 +9,12 @@ interface OSModalProps {
   onClose: () => void;
   onUpdate: () => void;
 }
+
+const STATUS_TRANSLATION: Record<OSStatus, string> = {
+  [OSStatus.TODO]: 'Não Iniciado',
+  [OSStatus.IN_PROGRESS]: 'Em Andamento',
+  [OSStatus.DONE]: 'Finalizado',
+};
 
 export const OSModal: React.FC<OSModalProps> = ({ os, currentUser, onClose, onUpdate }) => {
   const [messages, setMessages] = useState<Message[]>(os.messages);
@@ -37,8 +43,6 @@ export const OSModal: React.FC<OSModalProps> = ({ os, currentUser, onClose, onUp
     onUpdate();
   };
 
-  const formatDate = (ts: number) => new Date(ts).toLocaleString();
-
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl w-full max-w-5xl h-[85vh] flex flex-col md:flex-row shadow-2xl overflow-hidden animate-fade-in">
@@ -63,14 +67,14 @@ export const OSModal: React.FC<OSModalProps> = ({ os, currentUser, onClose, onUp
               <p className="text-xs text-slate-500 uppercase font-bold mb-1">Prazo</p>
               <div className="flex items-center gap-2 text-slate-800">
                 <Calendar size={16} className="text-blue-500" />
-                <span className="font-medium">{new Date(os.deadline).toLocaleDateString()}</span>
+                <span className="font-medium">{new Date(os.deadline).toLocaleDateString('pt-BR')}</span>
               </div>
             </div>
             <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
               <p className="text-xs text-slate-500 uppercase font-bold mb-1">Status</p>
               <div className="flex items-center gap-2">
-                {os.status === 'DONE' ? <CheckCircle size={16} className="text-green-500"/> : <Clock size={16} className="text-yellow-500"/>}
-                <span className="font-medium text-slate-800">{os.status}</span>
+                {os.status === OSStatus.DONE ? <CheckCircle size={16} className="text-green-500"/> : <Clock size={16} className="text-yellow-500"/>}
+                <span className="font-medium text-slate-800">{STATUS_TRANSLATION[os.status]}</span>
               </div>
             </div>
           </div>
@@ -120,7 +124,7 @@ export const OSModal: React.FC<OSModalProps> = ({ os, currentUser, onClose, onUp
                      {!isMe && <p className="text-xs font-bold mb-1 opacity-70">{msg.senderName}</p>}
                      <p className="text-sm">{msg.content}</p>
                      <p className={`text-[10px] mt-1 ${isMe ? 'text-blue-200' : 'text-slate-400'} text-right`}>
-                       {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                       {new Date(msg.timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
                      </p>
                    </div>
                  </div>

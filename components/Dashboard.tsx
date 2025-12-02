@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts';
-import { ServiceOrder, OSStatus, Role, User } from '../types';
+import { ServiceOrder, OSStatus, Role, User, OSPriority } from '../types';
 import { DollarSign, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
 
 interface DashboardProps {
@@ -38,11 +38,20 @@ export const Dashboard: React.FC<DashboardProps> = ({ orders, user }) => {
     ];
   }, [stats.revenue]);
 
+  const getPriorityLabel = (priority: OSPriority) => {
+    switch(priority) {
+      case OSPriority.HIGH: return 'ALTA';
+      case OSPriority.MEDIUM: return 'MÉDIA';
+      case OSPriority.LOW: return 'BAIXA';
+      default: return priority;
+    }
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-slate-800">
-          Dashboard {user.role === Role.DEV ? 'de Desenvolvimento' : 'Geral'}
+          Painel {user.role === Role.DEV ? 'de Desenvolvimento' : 'Geral'}
         </h2>
         <span className="text-sm text-slate-500">Atualizado agora</span>
       </div>
@@ -150,7 +159,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ orders, user }) => {
                    <span className={`px-2 py-1 rounded text-xs font-semibold ${
                      os.priority === 'HIGH' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'
                    }`}>
-                     {os.priority}
+                     {getPriorityLabel(os.priority)}
                    </span>
                  </li>
                ))}

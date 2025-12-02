@@ -45,6 +45,15 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ orders, onStatusChange
     }
   };
 
+  const getPriorityLabel = (p: OSPriority) => {
+    switch (p) {
+      case OSPriority.HIGH: return 'ALTA';
+      case OSPriority.MEDIUM: return 'MÉDIA';
+      case OSPriority.LOW: return 'BAIXA';
+      default: return p;
+    }
+  };
+
   const getAssigneeAvatar = (id?: string) => {
     const user = MOCK_USERS.find(u => u.id === id);
     return user ? user.avatar : 'https://via.placeholder.com/30';
@@ -80,7 +89,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ orders, onStatusChange
                 >
                   <div className="flex justify-between items-start mb-2">
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wide ${getPriorityColor(os.priority)}`}>
-                      {os.priority}
+                      {getPriorityLabel(os.priority)}
                     </span>
                     <button className="text-slate-400 hover:text-slate-600">
                       <MoreHorizontal size={16} />
@@ -93,7 +102,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ orders, onStatusChange
                   <div className="flex justify-between items-center pt-3 border-t border-slate-100">
                     <div className="flex items-center text-slate-400 text-xs gap-1">
                       <Calendar size={12} />
-                      <span>{new Date(os.deadline).toLocaleDateString()}</span>
+                      <span>{new Date(os.deadline).toLocaleDateString('pt-BR')}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       {os.assignedToId ? (
